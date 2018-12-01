@@ -1,0 +1,41 @@
+version: '3'
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx_c
+    ports:
+      - 80:80
+    volumes:
+      - ../:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+  php:
+    build: ./php
+    container_name: php_c
+    volumes:
+      - ../:/var/www
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
+    ports:
+      - 9000:9000
+      - 9501:9501
+  mysql:
+    build: ./mysql
+    container_name: mysql_c
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    restart: always
+  redis:
+    build: ./redis
+    container_name: redis_c
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/data:/data
+    restart: always
