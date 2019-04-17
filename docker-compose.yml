@@ -15,8 +15,8 @@ services:
     container_name: php_c
     volumes:
       - ../:/var/www
-      - ./php/php.ini:/usr/local/etc/php/php.ini
-      - ./php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
+        # - ./php/php.ini:/etc/php7/php.ini
+        #- ./php/php-fpm.conf:/etc/php7/php-fpm.conf
     ports:
       - 9000:9000
       - 9501:9501

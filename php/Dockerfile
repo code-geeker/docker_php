@@ -1,76 +1,60 @@
-FROM php:7.2-fpm-alpine3.8
-MAINTAINER Elliot <Mr.Elliot.SE@gmail.com>
+# @description php image base on the alpine 镜像更小. 本镜像用于开发，所以安装了常用工具
+#                       some information
+# ------------------------------------------------------------------------------------
+# @link https://hub.docker.com/_/alpine/      alpine image
+# @link https://hub.docker.com/_/php/         php image
+# @link https://github.com/docker-library/php php dockerfiles
+# ------------------------------------------------------------------------------------
+# @build-example docker build . -f alphp-dev.Dockerfile -t swoft/alphp:dev
+#
 
-ENV NAME="docker_php"
+FROM swoft/alphp:cli
+LABEL maintainer="Elliot" version="1.0"
 
-# Packages
-RUN apk --update add \
-    autoconf \
-    build-base \
-    linux-headers \
-    libaio-dev \
-    zlib-dev \
-    curl \
-    zsh \
-    vim \
-    git \
-    freetype-dev \
-    libjpeg-turbo-dev \
-    libmcrypt-dev \
-    libpng-dev \
-    libtool \
-    libbz2 \
-    bzip2 \
-    tzdata \
-    bzip2-dev \
-    libstdc++ \
-    libxslt-dev \
-    openldap-dev \
-    imagemagick-dev \
-    make \
-    unzip \
-    wget && \
-    docker-php-ext-install bcmath zip bz2 pdo_mysql mysqli simplexml opcache sockets mbstring pcntl xsl && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    pecl install redis && \
-    docker-php-ext-enable redis && \
-    pecl install swoole && \
-    docker-php-ext-enable swoole && \
-    docker-php-ext-install gd && \
-   #docker-php-ext-enable opcache && \
-    apk del build-base \
-    linux-headers \
-    libaio-dev \
-    && rm -rf /var/cache/apk/*
+WORKDIR /var/www
 
-
-# set timezome
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
+RUN set -ex \
+        && php -m \
+        # install some tools
+        && apk update \
+        && apk add --no-cache \
+            php7-fpm php7-pcntl \
+            vim wget zsh net-tools git zip unzip apache2-utils mysql-client redis \
+        && apk del --purge *-dev \
+        && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
+        # && rm /etc/nginx/conf.d/default.conf /etc/nginx/nginx.conf \
+        # install latest composer
+        && wget https://getcomposer.org/composer.phar \
+        && mv composer.phar /usr/local/bin/composer \
+        # - config nginx
+        #&& mkdir /run/nginx \
+        # - config PHP-FPM
+        && cd /etc/php7 \
+        && { \
+            echo "[global]"; \
+            echo "pid = /var/run/php-fpm.pid"; \
+            echo "[www]"; \
+            echo "user = www-data"; \
+            echo "group = www-data"; \
+        } | tee php-fpm.d/custom.conf \
+        # config site
+        && chown -R www-data:www-data /var/www \
+        && { \
+            echo "#!/bin/sh"; \
+           # echo "nginx -g 'daemon on;'"; \
+            # echo "php /var/www/uem.phar taskServer:start -d"; \
+            echo "php-fpm7 -F"; \
+        } | tee /run.sh \
+        && chmod 755 /run.sh
 
 # install oh my zsh
 RUN wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | zsh || true
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /tmp
-ENV COMPOSER_VERSION 1.5.1
+VOLUME ["/var/www", "/data"]
 
+EXPOSE 9501 80
 
-RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/da290238de6d63faace0343efbdd5aa9354332c5/web/installer \
- && php -r " \
-    \$signature = '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410'; \
-    \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
-    if (!hash_equals(\$signature, \$hash)) { \
-        unlink('/tmp/installer.php'); \
-        echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
-        exit(1); \
-    }" \
- && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
- && rm /tmp/installer.php \
- && composer --ansi --version --no-interaction
+# COPY docker/config/nginx.conf /etc/nginx/nginx.conf
+# COPY docker/config/app-vhost.conf /etc/nginx/conf.d/app-vhost.conf
 
-VOLUME /var/www
-WORKDIR /var/www
-
-CMD php-fpm
+CMD /run.sh
