@@ -11,6 +11,8 @@
 FROM swoft/alphp:cli
 LABEL maintainer="Elliot" version="1.0"
 
+ENV NAME="docker_php"
+
 WORKDIR /var/www
 
 RUN set -ex \
