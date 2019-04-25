@@ -20,7 +20,7 @@ RUN set -ex \
         # install some tools
         && apk update \
         && apk add --no-cache \
-            php7-fpm php7-pcntl \
+            php7-fpm php7-pcntl php7-bcmath \
             vim wget zsh net-tools git zip unzip apache2-utils mysql-client redis \
         && apk del --purge *-dev \
         && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
