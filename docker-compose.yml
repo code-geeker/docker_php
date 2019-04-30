@@ -39,3 +39,11 @@ services:
     volumes:
       - ./redis/data:/data
     restart: always
+  mongodb:
+    build: ./mongodb
+    container_name: mongodb_c
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb/data:/data/db
+    restart: always
