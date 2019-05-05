@@ -6,7 +6,9 @@ ENV NAME="docker_redis"
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN addgroup -S redis && adduser -S -G redis redis
 
-RUN apk add --no-cache \
+RUN set -ex \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/' /etc/apk/repositories \
+    && apk add --no-cache \
 # grab su-exec for easy step-down from root
 		'su-exec>=0.2' \
 # add tzdata for https://github.com/docker-library/redis/issues/138
