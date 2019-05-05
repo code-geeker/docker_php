@@ -3,11 +3,11 @@ server
   listen 80;
   server_name dev.playhudong.me;
 
-  root /var/www/lh_swoole/Public;
+  root /var/www//Public;
   index index.html index.htm;
 
-        access_log /var/log/nginx/dev_access.log;
-        error_log /var/log/nginx/dev_error.log;
+  access_log /var/log/nginx/dev_access.log;
+  error_log /var/log/nginx/dev_error.log;
 
   location /
   {

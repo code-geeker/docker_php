@@ -17,6 +17,7 @@ services:
       - ../:/var/www
         # - ./php/php.ini:/etc/php7/php.ini
         #- ./php/php-fpm.conf:/etc/php7/php-fpm.conf
+      - ./php/conf:/etc/php7
     ports:
       - 9000:9000
       - 9501:9501
