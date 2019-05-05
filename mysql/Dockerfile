@@ -8,7 +8,10 @@ ENV TERM dumb
 
 RUN mkdir /docker-entrypoint-initdb.d
 
-RUN apk add --update mysql mysql-client bash pwgen tzdata && \
+
+RUN set -ex \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/' /etc/apk/repositories \
+    && apk --update add mysql mysql-client bash pwgen tzdata && \
     rm -f /var/cache/apk/* && \
     mkdir -p /etc/mysql/conf.d \
     && { \
