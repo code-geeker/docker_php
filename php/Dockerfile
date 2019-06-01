@@ -9,7 +9,7 @@
 #
 
 FROM swoft/alphp:cli
-LABEL maintainer="Elliot" version="1.0"
+LABEL maintainer="Elliot" version="1.1"
 
 ENV NAME="docker_php"
 
@@ -28,8 +28,7 @@ RUN set -ex \
         # install latest composer
         && wget https://getcomposer.org/composer.phar \
         && mv composer.phar /usr/local/bin/composer \
-        # - config nginx
-        #&& mkdir /run/nginx \
+	&& chmod +x /usr/local/bin/composer \ 
         # - config PHP-FPM
         && cd /etc/php7 \
         && { \
