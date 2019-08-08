@@ -24,7 +24,6 @@ RUN set -ex \
             vim wget openssh zsh net-tools git zip unzip apache2-utils mysql-client redis \
         && apk del --purge *-dev \
         && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
-        # && rm /etc/nginx/conf.d/default.conf /etc/nginx/nginx.conf \
         # install latest composer
         && wget https://getcomposer.org/composer.phar \
         && mv composer.phar /usr/local/bin/composer \
@@ -42,8 +41,6 @@ RUN set -ex \
         && chown -R www-data:www-data /var/www \
         && { \
             echo "#!/bin/sh"; \
-           # echo "nginx -g 'daemon on;'"; \
-            # echo "php /var/www/uem.phar taskServer:start -d"; \
             echo "php-fpm7 -F"; \
         } | tee /run.sh \
         && chmod 755 /run.sh
