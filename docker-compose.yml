@@ -48,3 +48,14 @@ services:
     volumes:
       - ./mongodb/data:/data/db
     restart: always
+  golang:
+     build: ./golang
+     container_name: go_c
+     ports:
+       - "8088:8088"
+     links:
+       - "mysql"
+       - "redis"
+     volumes:
+       - ../go:/go
+     tty: true
