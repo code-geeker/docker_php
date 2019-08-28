@@ -20,7 +20,7 @@ RUN set -ex \
         # install some tools
         && apk update \
         && apk add --no-cache \
-            build-base libgit2-dev php7-fpm php7-pcntl php7-bcmath php7-mysqli php7-xmlwriter php7-pear php7-xmlreader \
+            build-base libgit2-dev php7-dev php7-fpm php7-pcntl php7-bcmath php7-mysqli php7-xmlwriter php7-pear php7-xmlreader \
             vim wget openssh zsh net-tools git zip unzip apache2-utils mysql-client redis \
         && apk del --purge *-dev \
         && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
