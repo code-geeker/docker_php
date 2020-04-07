@@ -52,7 +52,4 @@ VOLUME ["/var/www", "/data"]
 
 EXPOSE 9501 80
 
-# COPY docker/config/nginx.conf /etc/nginx/nginx.conf
-# COPY docker/config/app-vhost.conf /etc/nginx/conf.d/app-vhost.conf
-
 CMD /run.sh
