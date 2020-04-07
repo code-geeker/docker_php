@@ -3,3 +3,4 @@ mysql/data
 nginx/logs
 redis/data
 mongodb/data
+nginx/conf.d
