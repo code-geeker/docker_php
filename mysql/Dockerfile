@@ -10,7 +10,7 @@ RUN mkdir /docker-entrypoint-initdb.d
 
 
 RUN set -ex \
-    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/' /etc/apk/repositories \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk --update add mysql mysql-client bash pwgen tzdata && \
     rm -f /var/cache/apk/* && \
     mkdir -p /etc/mysql/conf.d \

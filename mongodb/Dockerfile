@@ -5,7 +5,7 @@ MAINTAINER Elliot <Mr.Elliot.SE@gmail.com>
 ENV NAME="docker_mongodb"
 
 RUN set -ex \
-    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/' /etc/apk/repositories \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk --update add \
 	&& apk add --no-cache mongodb
 

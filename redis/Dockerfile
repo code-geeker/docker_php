@@ -7,7 +7,7 @@ ENV NAME="docker_redis"
 RUN addgroup -S redis && adduser -S -G redis redis
 
 RUN set -ex \
-    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/' /etc/apk/repositories \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk add --no-cache \
 # grab su-exec for easy step-down from root
 		'su-exec>=0.2' \
