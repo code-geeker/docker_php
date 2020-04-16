@@ -16,11 +16,14 @@ ENV NAME="docker_php"
 WORKDIR /var/www
 
 RUN set -ex \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/' /etc/apk/repositories
+
+RUN set -ex \
         && php -m \
         # install some tools
         && apk update \
         && apk add --no-cache \
-            build-base libgit2-dev php7-dev php7-fpm php7-pcntl php7-bcmath php7-mysqli php7-xmlwriter php7-pear php7-xmlreader \
+            build-base libgit2-dev php7-dev php7-fpm php7-pcntl php7-bcmath php7-mysqli php7-xmlwriter php7-pear php7-xmlreader php7-pgsql php7-pdo_pgsq\
             vim wget openssh zsh net-tools git zip unzip apache2-utils mysql-client redis \
         && apk del --purge *-dev \
         && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
@@ -47,6 +50,10 @@ RUN set -ex \
 
 # install oh my zsh
 RUN wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | zsh || true
+
+# set timezome
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 VOLUME ["/var/www", "/data"]
 
