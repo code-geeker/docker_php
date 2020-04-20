@@ -24,10 +24,12 @@ services:
     volumes:
       - ../:/var/www
       - ./php/conf:/etc/php7
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
     ports:
       - 9501:9501
     networks:
       - custom_net
+
   mysql:
     build: ./mysql
     container_name: mysql_c
