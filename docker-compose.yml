@@ -10,6 +10,7 @@ services:
       custom_net:
         aliases:
           - rects.me
+          - rects-en.me
 
     volumes:
       - ../:/var/www
