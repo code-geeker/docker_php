@@ -28,7 +28,8 @@ RUN set -ex \
         && apk del --purge *-dev \
         && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
         # install latest composer
-        && wget https://getcomposer.org/download/1.10.5/composer.phar \
+        # && wget https://getcomposer.org/download/1.10.5/composer.phar \
+        && wget https://mirrors.aliyun.com/composer/composer.phar \
         && mv composer.phar /usr/local/bin/composer \
 	&& chmod +x /usr/local/bin/composer \
         # - config PHP-FPM
