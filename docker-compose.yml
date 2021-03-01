@@ -35,16 +35,33 @@ services:
     build:
       context: ./lucee
       args:
-        LUCEE_VERSION: "5.3.7.45-RC"
+        LUCEE_VERSION: "5.3.7.48-RC"
         LUCEE_ADMIN_PASSWORD: "admin"
         LUCEE_EXTENSIONS: "6E2CB28F-98FB-4B51-B6BE6C64ADF35473"
         LUCEE_EXTENSIONS: "671B01B8-B3B3-42B9-AC055A356BED5281"
     container_name: lucee_c
     volumes:
-            - ~/lucee:/srv/www/webapps
-      #  - ~/lucee:/srv/www/webapps/ROOT
+      - ~/lucee/pmhs-lucee:/srv/www/webapps
+      - ~/lucee/admin-lucee:/srv/www/webapps/ROOT
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
     ports:
       - 8080:8080
+    networks:
+      - custom_net
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+    networks:
+      - custom_net
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8181:8080
     networks:
       - custom_net
 
