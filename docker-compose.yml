@@ -41,7 +41,8 @@ services:
         LUCEE_EXTENSIONS: "671B01B8-B3B3-42B9-AC055A356BED5281"
     container_name: lucee_c
     volumes:
-      - ../:/srv/www/webapps
+            - ~/lucee:/srv/www/webapps
+      #  - ~/lucee:/srv/www/webapps/ROOT
     ports:
       - 8080:8080
     networks:
