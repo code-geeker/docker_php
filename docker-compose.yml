@@ -13,19 +13,19 @@ services:
           - rects-en.me
 
     volumes:
-      - ../:/var/www:cached
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:cached
-      - ./nginx/conf.d:/etc/nginx/conf.d:cached
-      - ./nginx/logs:/var/log/nginx:cached
-      - ./nginx/ssl:/etc/nginx/ssl:cached
+      - ../:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/ssl:/etc/nginx/ssl
 
   php:
     build: ./php
     container_name: php_c
     volumes:
-      - ../:/var/www:cached
-      - ./php/conf:/etc/php7:cached
-      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:cached
+      - ../:/var/www
+      - ./php/conf:/etc/php7
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
     ports:
       - 9501:9501
     networks:
@@ -52,14 +52,16 @@ services:
   postgres:
     image: postgres
     restart: always
+    container_name: postgres_c
     environment:
       POSTGRES_PASSWORD: admin
     networks:
       - custom_net
 
   adminer:
-    image: adminer
+    image: adminer:latest
     restart: always
+    container_name: adminer_c
     ports:
       - 8181:8080
     networks:
@@ -83,8 +85,8 @@ services:
     build: ./mysql
     container_name: mysql_c
     volumes:
-      - ./mysql/data:/var/lib/mysql:cached
-      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf:cached
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - 3306:3306
     networks:
@@ -102,7 +104,7 @@ services:
     networks:
       - custom_net
     volumes:
-      - ./redis/data:/data:cached
+      - ./redis/data:/data
     restart: always
 
   # mongodb:
@@ -113,7 +115,7 @@ services:
     # networks:
       # - custom_net
     # volumes:
-      # - ./mongodb/data:/data/db:cached
+      # - ./mongodb/data:/data/db
     # restart: always
 
 networks:
