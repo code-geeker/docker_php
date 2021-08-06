@@ -22,6 +22,8 @@ services:
   php:
     build: ./php
     container_name: php_c
+    environment:
+     APP_ENV: local
     volumes:
       - ../:/var/www
       - ./php/conf:/etc/php7
@@ -31,41 +33,70 @@ services:
     networks:
       - custom_net
 
-  lucee:
-    build:
-      context: ./lucee
-      args:
-        LUCEE_VERSION: "5.3.7.48-RC"
-        LUCEE_ADMIN_PASSWORD: "admin"
-        LUCEE_EXTENSIONS: "6E2CB28F-98FB-4B51-B6BE6C64ADF35473"
-        LUCEE_EXTENSIONS: "671B01B8-B3B3-42B9-AC055A356BED5281"
-    container_name: lucee_c
-    volumes:
-      - ~/lucee/pmhs-lucee:/srv/www/webapps
-      - ~/lucee/admin-lucee:/srv/www/webapps/ROOT
-      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
-    ports:
-      - 8080:8080
-    networks:
-      - custom_net
+  # lucee:
+    # build:
+      # context: ./lucee
+      # args:
+        # LUCEE_ADMIN_PASSWORD: "admin"
+        # LUCEE_EXTENSIONS: "6E2CB28F-98FB-4B51-B6BE6C64ADF35473,671B01B8-B3B3-42B9-AC055A356BED5281"
+    # container_name: lucee_c
+    # volumes:
+      # - ~/lucee/pmhs-lucee:/srv/www/app/webroot
+      # - ./lucee/app/webroot:/srv/www/app/webapps/ROOT
+      # - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    # ports:
+      # - 8080:8080
+    # networks:
+      # - custom_net
 
-  postgres:
-    image: postgres
-    restart: always
-    container_name: postgres_c
-    environment:
-      POSTGRES_PASSWORD: admin
-    networks:
-      - custom_net
+  # lucee:
+    # image: lucee/lucee:latest
+    # container_name: lucee_c
+    # volumes:
+      # - ./config/:/opt/lucee/web/
+      # - ~/lucee/pmhs-lucee:/var/www
+      # # - ~/lucee/admin-lucee:/var/www
+      # - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    # ports:
+      # - 9999:8888
+    # networks:
+      # - custom_net
 
-  adminer:
-    image: adminer:latest
-    restart: always
-    container_name: adminer_c
-    ports:
-      - 8181:8080
-    networks:
-      - custom_net
+
+  # postgres:
+    # image: postgres:latest
+    # restart: always
+    # container_name: postgres_c
+    # environment:
+      # POSTGRES_PASSWORD: admin
+    # volumes:
+      # - ./postgresql/data:/var/lib/postgresql/data
+    # ports:
+      # - 5432:5432
+    # networks:
+      # - custom_net
+
+  # adminer:
+    # image: adminer:latest
+    # restart: always
+    # container_name: adminer_c
+    # ports:
+      # - 8181:8080
+    # networks:
+      # - custom_net
+
+  # pgadmin:
+    # image: dpage/pgadmin4:5.0
+    # # build: ./pgadmin4
+    # restart: always
+    # container_name: pgadmin_c
+    # environment:
+      # PGADMIN_DEFAULT_EMAIL: elliot@admin.com
+      # PGADMIN_DEFAULT_PASSWORD: admin
+    # ports:
+      # - 8080:80
+    # networks:
+      # - custom_net
 
 
   # mysql:
@@ -77,6 +108,17 @@ services:
       # - 3306:3306
     # networks:
       # - custom_net
+    # volumes:
+      # - ./mariadb:/var/lib/mysql
+    # restart: always
+
+  # mysql:
+    # image: yobasystems/alpine-mariadb
+    # container_name: mysql_c
+    # environment:
+      # MYSQL_ROOT_PASSWORD: root
+    # ports:
+      # - 3306:3306
     # volumes:
       # - ./mariadb:/var/lib/mysql
     # restart: always
@@ -96,7 +138,6 @@ services:
     restart: always
 
   redis:
-    # build: ./redis
     image: redis:5-alpine
     container_name: redis_c
     ports:
@@ -107,16 +148,6 @@ services:
       - ./redis/data:/data
     restart: always
 
-  # mongodb:
-    # build: ./mongodb
-    # container_name: mongodb_c
-    # ports:
-      # - 27017:27017
-    # networks:
-      # - custom_net
-    # volumes:
-      # - ./mongodb/data:/data/db
-    # restart: always
 
 networks:
   custom_net:
