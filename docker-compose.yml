@@ -33,6 +33,19 @@ services:
     networks:
       - custom_net
 
+  php74:
+    build: ./php74
+    container_name: php74_c
+    environment:
+     APP_ENV: local
+    volumes:
+      - ../:/var/www
+      # - ./php74/conf:/etc/php7
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    ports:
+      - 5432:5432
+    networks:
+      - custom_net
   # lucee:
     # build:
       # context: ./lucee
