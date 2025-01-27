@@ -4,3 +4,5 @@ nginx/logs
 redis/data
 mongodb/data
 nginx/conf.d
+mariadb
+opensearch

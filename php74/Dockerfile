@@ -46,6 +46,8 @@ RUN apt-get install -y libpq-dev \
 
 RUN pecl install redis && docker-php-ext-enable redis
 
+#RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+
 # set timezome
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

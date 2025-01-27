@@ -16,22 +16,51 @@ services:
       - ../:/var/www
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/conf:/etc/nginx/conf
       - ./nginx/logs:/var/log/nginx
       - ./nginx/ssl:/etc/nginx/ssl
 
-  php:
-    build: ./php
-    container_name: php_c
-    environment:
-     APP_ENV: local
-    volumes:
-      - ../:/var/www
-      - ./php/conf:/etc/php7
-      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
-    ports:
-      - 9501:9501
-    networks:
-      - custom_net
+  # php:
+    # build: ./php
+    # container_name: php_c
+    # environment:
+     # APP_ENV: local
+    # volumes:
+      # - ../:/var/www
+      # - ./php/conf:/etc/php7
+      # - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    # ports:
+      # - 5431:5431
+      # - 5432:5432
+      # - 5433:5433
+      # - 5459:5459
+    # networks:
+      # - custom_net
+
+        #web:
+        #    image: hoppscotch/hoppscotch:latest
+        #    restart: always
+        #    container_name: hoppscotch_c
+        #    volumes:
+        #      - "./hoppscotch/.hoppscotch:/app/.hoppscotch"
+        #      - "./hoppscotch/assets:/app/assets"
+        #      - "./hoppscotch/directives:/app/directives"
+        #      - "./hoppscotch/layouts:/app/layouts"
+        #      - "./hoppscotch/middleware:/app/middleware"
+        #      - "./hoppscotch/pages:/app/pages"
+        #      - "./hoppscotch/plugins:/app/plugins"
+        #      - "./hoppscotch/static:/app/static"
+        #      - "./hoppscotch/store:/app/store"
+        #      - "./hoppscotch/components:/app/components"
+        #      - "./hoppscotch/helpers:/app/helpers"
+        #    ports:
+        #      - "3000:3000"
+        #    environment:
+        #      HOST: 0.0.0.0
+        #    command: "pnpm run dev"
+        #    networks:
+        #      - custom_net
+
 
   php74:
     build: ./php74
@@ -43,9 +72,28 @@ services:
       # - ./php74/conf:/etc/php7
       - ~/.ssh/id_rsa:/root/.ssh/id_rsa
     ports:
+      - 5431:5431
       - 5432:5432
+      - 5433:5433
+      - 5434:5434
+      - 5459:5459
     networks:
       - custom_net
+
+  php82:
+    build: ./php82
+    container_name: php82_c
+    environment:
+     APP_ENV: local
+    volumes:
+      - ../:/var/www
+      - ~/www/docker_php/php82/conf:/usr/local/etc
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    ports:
+      - 9001:9000
+    networks:
+      - custom_net
+
   # lucee:
     # build:
       # context: ./lucee
@@ -66,9 +114,9 @@ services:
     # image: lucee/lucee:latest
     # container_name: lucee_c
     # volumes:
-      # - ./config/:/opt/lucee/web/
-      # - ~/lucee/pmhs-lucee:/var/www
-      # # - ~/lucee/admin-lucee:/var/www
+      # - ~/lucee/config/:/opt/lucee/web/
+      # - ~/lucee/vivo/:/var/www/
+      # - ~/lucee/vivo/:/usr/local/tomcat/webapps/ROOT/
       # - ~/.ssh/id_rsa:/root/.ssh/id_rsa
     # ports:
       # - 9999:8888
@@ -125,30 +173,19 @@ services:
       # - ./mariadb:/var/lib/mysql
     # restart: always
 
-  # mysql:
-    # image: yobasystems/alpine-mariadb
-    # container_name: mysql_c
-    # environment:
-      # MYSQL_ROOT_PASSWORD: root
-    # ports:
-      # - 3306:3306
-    # volumes:
-      # - ./mariadb:/var/lib/mysql
-    # restart: always
-
   mysql:
-    build: ./mysql
-    container_name: mysql_c
-    volumes:
-      - ./mysql/data:/var/lib/mysql
-      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-    ports:
-      - 3306:3306
-    networks:
-      - custom_net
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-    restart: always
+   image: yobasystems/alpine-mariadb:10.6
+   container_name: mysql_c
+   environment:
+    MYSQL_ROOT_PASSWORD: root
+   ports:
+    - 3306:3306
+   networks:
+    - custom_net
+   volumes:
+    - ./mariadb:/var/lib/mysql
+   restart: always
+
 
   redis:
     image: redis:5-alpine
@@ -161,8 +198,24 @@ services:
       - ./redis/data:/data
     restart: always
 
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch_c
+    environment:
+      "discovery.type": "single-node"
+      "OPENSEARCH_INITIAL_ADMIN_PASSWORD": "Wocao@zhenfuza666"
+    ports:
+      - 9200:9200
+      - 9600:9600
+    networks:
+      - custom_net
+    volumes:
+      - ./opensearch/data:/usr/share/opensearch/data
+      - ./opensearch/conf:/usr/share/opensearch/config
+    restart: always
+
 
 networks:
   custom_net:
-   external:
-      name: app_net
+   external: true
+   name: app_net
