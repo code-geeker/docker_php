@@ -81,7 +81,7 @@ services:
 
 
   lucee:
-    image: lucee/lucee:5.3.2.77-light
+    image: lucee/lucee:5.3.2.77
     container_name: lucee_c
     ports:
       - 8899:8888
@@ -91,8 +91,8 @@ services:
       LUCEE_JAVA_OPTS: "-Xms256m -Xmx2g -XX:+UseG1GC"
       LUCEE_ADMIN_PASSWORD: admin123
     volumes:
-      - ~/lucee_conf/tomcat_conf:/usr/local/tomcat/conf
-      - ~/lucee_conf/lucee_opt:/opt/lucee
+      # - ~/lucee_conf/tomcat_conf:/usr/local/tomcat/conf
+      # - ~/lucee_conf/lucee_opt:/opt/lucee
       - ~/www/bms:/var/www
     restart: always
 
